@@ -1,0 +1,11 @@
+# Ignore secret environment variables
+.env
+
+# Ignore local SQLite database files
+*.db
+AI_Model_Abuse.db
+
+# Ignore Python cache & virtual environment
+__pycache__/
+*.pyc
+venv/
