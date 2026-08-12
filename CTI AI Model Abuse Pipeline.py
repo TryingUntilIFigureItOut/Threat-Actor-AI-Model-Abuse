@@ -94,16 +94,22 @@ def save_report(title, source_type, link, content, published, category):
 
 def parse_pdf_report(pdf_path):
     if not os.path.exists(pdf_path):
+        print(f"⚠️ PDF file not found at path: {pdf_path}. Skipping.")
         return
-    reader = PdfReader(pdf_path)
-    full_text = "".join([page.extract_text() for page in reader.pages if page.extract_text()])
-    
-    is_match, category = classify_and_filter(full_text)
-    if is_match:
-        save_report(os.path.basename(pdf_path), "PDF", pdf_path, full_text, "Historical", category)
-        print(f"📄 Saved PDF report under category: [{category}]")
-    else:
-        print("⏭️ PDF report skipped (did not match threat filtering criteria).")
+
+    try:
+        reader = PdfReader(pdf_path)
+        full_text = "".join([page.extract_text() for page in reader.pages if page.extract_text()])
+        
+        is_match, category = classify_and_filter(full_text)
+        if is_match:
+            save_report(os.path.basename(pdf_path), "PDF", pdf_path, full_text, "Historical", category)
+            print(f"📄 Saved PDF report under category: [{category}]")
+        else:
+            print("⏭️ PDF report skipped (did not match threat filtering criteria).")
+
+    except Exception as e:
+        print(f"⚠️ Warning: Failed to parse PDF '{pdf_path}'. Skipping file. Error details: {e}")
 
 def fetch_rss_reports(feed_url):
     feed = feedparser.parse(feed_url)
