@@ -47,11 +47,9 @@ def classify_and_filter(text):
     has_intent = any(kw in text_lower for kw in TAXONOMY["TACTICAL_INTENT"])
     has_ttp = any(kw in text_lower for kw in TAXONOMY["TECHNICAL_TTPS"])
 
-    # Must have either an Attribution reference OR explicit Tactical Intent/TTP
     if not (has_actor or has_intent or has_ttp):
         return False, "General AI"
 
-    # Determine primary category tag for database storage
     if "covert io" in text_lower or "information operation" in text_lower or "sockpuppet" in text_lower:
         category = "IO / Influence Operations"
     elif "malware" in text_lower or "phishing" in text_lower or "exploit" in text_lower:
@@ -66,6 +64,7 @@ def classify_and_filter(text):
     return True, category
 
 def init_db():
+    """Create schema and automatically apply migrations for new AI Analysis columns."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("""
@@ -76,9 +75,29 @@ def init_db():
             link TEXT,
             content TEXT,
             published TEXT,
-            category TEXT
+            category TEXT,
+            threat_analysis TEXT,
+            indicators TEXT,
+            detection_rules TEXT,
+            yara_rules TEXT
         )
     """)
+    
+    # Auto-migration: Check for missing columns in existing databases
+    cursor.execute("PRAGMA table_info(reports)")
+    columns = [col[1] for col in cursor.fetchall()]
+    new_cols = {
+        "threat_analysis": "TEXT",
+        "indicators": "TEXT",
+        "detection_rules": "TEXT",
+        "yara_rules": "TEXT"
+    }
+    
+    for col_name, col_type in new_cols.items():
+        if col_name not in columns:
+            cursor.execute(f"ALTER TABLE reports ADD COLUMN {col_name} {col_type}")
+            print(f"[*] Migrated DB: Added column [{col_name}]")
+
     conn.commit()
     conn.close()
 
