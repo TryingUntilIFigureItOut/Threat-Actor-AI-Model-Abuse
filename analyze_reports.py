@@ -12,6 +12,13 @@ client = Groq(api_key=api_key)
 RULES_DIR = "rules"
 os.makedirs(RULES_DIR, exist_ok=True)
 
+# Helper function to safely stringify LLM outputs
+def stringify_field(value):
+    """Converts dicts, lists, or non-string fields into formatted strings for SQLite/Markdown."""
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, indent=2)
+    return str(value) if value is not None else ""
+
 # 2. Query database for reports missing AI Analysis
 conn = sqlite3.connect("AI_Model_Abuse.db")
 cursor = conn.cursor()
@@ -58,12 +65,14 @@ for report in reports:
 
     try:
         data = json.loads(response.choices[0].message.content)
-        threat_analysis = data.get("threat_analysis", "")
-        indicators = data.get("indicators", "")
-        detection_rules = data.get("detection_rules", "")
-        yara_rules = data.get("yara_rules", "")
+        
+        # Ensure all fields are safe strings before passing to SQLite
+        threat_analysis = stringify_field(data.get("threat_analysis"))
+        indicators = stringify_field(data.get("indicators"))
+        detection_rules = stringify_field(data.get("detection_rules"))
+        yara_rules = stringify_field(data.get("yara_rules"))
 
-        # Update SQLite DB with detailed column values
+        # Update SQLite DB with safe string values
         cursor.execute("""
             UPDATE reports
             SET threat_analysis = ?,
