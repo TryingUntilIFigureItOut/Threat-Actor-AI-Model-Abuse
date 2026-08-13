@@ -1,0 +1,1 @@
+rule GPT55_Cyber_MODEL_ABUSE { meta: description = "Detects potential GPT-5.5 and GPT-5.5-Cyber model abuse" condition: any of them

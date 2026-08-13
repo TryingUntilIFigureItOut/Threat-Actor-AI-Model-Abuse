@@ -1,0 +1,1 @@
+rule scam_operation { meta: author = "AI Threat Intel" description = "Identify scam operations using ChatGPT" strings: $prompt1 = "high-yield investment" $prompt2 = "instant romance" condition: any of ($prompt*) }

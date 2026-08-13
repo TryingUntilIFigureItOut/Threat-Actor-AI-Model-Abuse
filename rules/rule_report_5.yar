@@ -1,0 +1,1 @@
+rule OpenAI_Prompt_Injection { meta: author = "AI Threat Intel" description = "Detects potential prompt injection patterns in OpenAI API requests" strings: $a = "[insert suspicious prompt pattern]" condition: $a}

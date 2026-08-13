@@ -1,0 +1,1 @@
+rule GPT_56_Cyber_Malicious_Prompt { meta: author = "AI Threat Intel" description = "Detects malicious prompts for GPT-5.6-Cyber" strings: $a = "generate exploit" $b = "vulnerability test" condition: any of ($*) }
