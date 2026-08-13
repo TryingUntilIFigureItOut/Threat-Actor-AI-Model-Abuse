@@ -7,6 +7,10 @@ on:
     - cron: "0 */12 * * *" # Runs every 12 hours
   workflow_dispatch:
 
+# Grant write permissions to commit generated rules back to the repository
+permissions:
+  contents: write
+
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
@@ -31,3 +35,11 @@ jobs:
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python analyze_reports.py
+
+      - name: Commit and Push Generated Rules
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add rules/
+          git commit -m "Auto-generate threat detection rules from pipeline" || echo "No changes to commit"
+          git push
