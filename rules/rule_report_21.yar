@@ -1,0 +1,1 @@
+rule LLM_Threat_Signature { meta: author = "AI Threat Intel" description = "Detects potential LLM threat signatures" strings: $a = "suspicious_keyword" $b = "malicious_prompt_pattern" condition: $a or $b }

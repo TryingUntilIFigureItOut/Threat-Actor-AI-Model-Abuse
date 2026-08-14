@@ -1,0 +1,1 @@
+rule Threat_Signature { meta: author = "AI-Threat-Intel" description = "Detects potential threat signatures in prompts" strings: $a = "generate malware" $b = "create phishing" condition: any of them }

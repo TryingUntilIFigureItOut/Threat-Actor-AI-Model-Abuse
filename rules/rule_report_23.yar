@@ -1,0 +1,1 @@
+rule Operation_Wrong_Number { meta: author = "AI Threat Intel" description = " Detects Operation 'Wrong Number' AI-assisted scam artifacts" strings: $a = "AI-generated scam pattern" $b = "Cambodia IP address" condition: $a and $b }
