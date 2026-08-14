@@ -5,9 +5,6 @@ from pypdf import PdfReader
 
 DB_NAME = "AI_Model_Abuse.db"
 
-# ==========================================
-# CTI TAXONOMY KEYWORD DICTIONARY
-# ==========================================
 TAXONOMY = {
     "PLATFORM_CONTEXT": [
         "openai", "chatgpt", "gpt-4", "gpt-3.5", "llm", "ai model"
@@ -31,18 +28,11 @@ TAXONOMY = {
 }
 
 def classify_and_filter(text):
-    """
-    Evaluates article text against CTI taxonomy layers.
-    Returns (is_relevant: bool, primary_category: str)
-    """
     text_lower = text.lower()
-
-    # Layer 1: Must reference the platform/model
     has_platform = any(kw in text_lower for kw in TAXONOMY["PLATFORM_CONTEXT"])
     if not has_platform:
         return False, "Unrelated"
 
-    # Layer 2 & 3 Matching
     has_actor = any(kw in text_lower for kw in TAXONOMY["ATTRIBUTION"])
     has_intent = any(kw in text_lower for kw in TAXONOMY["TACTICAL_INTENT"])
     has_ttp = any(kw in text_lower for kw in TAXONOMY["TECHNICAL_TTPS"])
@@ -64,7 +54,6 @@ def classify_and_filter(text):
     return True, category
 
 def init_db():
-    """Create schema and automatically apply migrations for new AI Analysis columns."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("""
@@ -83,7 +72,6 @@ def init_db():
         )
     """)
     
-    # Auto-migration: Check for missing columns in existing databases
     cursor.execute("PRAGMA table_info(reports)")
     columns = [col[1] for col in cursor.fetchall()]
     new_cols = {

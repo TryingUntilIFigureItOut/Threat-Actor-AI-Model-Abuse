@@ -4,7 +4,6 @@ import json
 from dotenv import load_dotenv
 from groq import Groq
 
-# 1. Load configuration
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
 client = Groq(api_key=api_key)
@@ -12,14 +11,11 @@ client = Groq(api_key=api_key)
 RULES_DIR = "rules"
 os.makedirs(RULES_DIR, exist_ok=True)
 
-# Helper function to safely stringify LLM outputs
 def stringify_field(value):
-    """Converts dicts, lists, or non-string fields into formatted strings for SQLite/Markdown."""
     if isinstance(value, (dict, list)):
         return json.dumps(value, indent=2)
     return str(value) if value is not None else ""
 
-# 2. Query database for reports missing AI Analysis
 conn = sqlite3.connect("AI_Model_Abuse.db")
 cursor = conn.cursor()
 
@@ -66,13 +62,11 @@ for report in reports:
     try:
         data = json.loads(response.choices[0].message.content)
         
-        # Ensure all fields are safe strings before passing to SQLite
         threat_analysis = stringify_field(data.get("threat_analysis"))
         indicators = stringify_field(data.get("indicators"))
         detection_rules = stringify_field(data.get("detection_rules"))
         yara_rules = stringify_field(data.get("yara_rules"))
 
-        # Update SQLite DB with safe string values
         cursor.execute("""
             UPDATE reports
             SET threat_analysis = ?,
@@ -83,7 +77,6 @@ for report in reports:
         """, (threat_analysis, indicators, detection_rules, yara_rules, report_id))
         conn.commit()
 
-        # Save to local rules directory
         rule_filename = os.path.join(RULES_DIR, f"detection_report_{report_id}.md")
         with open(rule_filename, "w", encoding="utf-8") as f:
             f.write(f"# CTI Analysis & Rules - Report #{report_id}\n\n")
@@ -98,7 +91,6 @@ for report in reports:
             f.write("## 4. Yara Rules\n")
             f.write(f"```yara\n{yara_rules}\n```\n")
 
-        # Save dedicated YARA file if rule is populated
         if yara_rules.strip():
             yara_filename = os.path.join(RULES_DIR, f"rule_report_{report_id}.yar")
             with open(yara_filename, "w", encoding="utf-8") as yf:
