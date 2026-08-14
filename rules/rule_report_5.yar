@@ -1,5 +1,1 @@
-<<<<<<< Updated upstream
-rule OpenAI_Safety_Threat { meta: author = "AI Threat Intel" description = "Detects potential Safety Bug Bounty threats" strings: $a = "excessive recursion" $b = "nested queries" $c = "unknown origin" condition: any of them }
-=======
-rule TrustedAccessCyber { meta: description = "Detects potential misuse of GPT-5.5 and GPT-5.5-Cyber" condition: any of them }
->>>>>>> Stashed changes
+rule OpenAI_Safety_Bug_Bounty_Program : OpenAI { meta: author = "Threat Intelligence" description = "Detects OpenAI Safety Bug Bounty program related artifacts" strings: $prompt_injection = "prompt=" $data_exfiltration = "data=" condition: $prompt_injection or $data_exfiltration }

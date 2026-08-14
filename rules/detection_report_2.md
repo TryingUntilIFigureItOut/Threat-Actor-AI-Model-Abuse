@@ -1,89 +1,33 @@
 # CTI Analysis & Rules - Report #2
 
-**Title:** Expanding Daybreak as the Cyber Defense Window Narrows
-**Category:** Offensive Cyber Operations
+**Title:** Disrupting a Criminal Scam Operation
+**Category:** Scams / Social Engineering
 
 ## 1. Threat Analysis & TTP Mapping
-<<<<<<< Updated upstream
-The reported scam operation leverages ChatGPT for social engineering tactics, primarily focusing on investment, romance, gambling, and impersonation schemes. This aligns with the MITRE ATT&CK tactics of 'Social Engineering' (T1566) and 'Phishing' (T1598), utilizing the technique of 'Spearphishing via Social Media' (T1193) and potentially 'Content Spoofing' (T1584) to deceive victims. Given the use of LLM for generating convincing content, it also touches upon the 'Content Manipulation' (T1583) technique, making it crucial to monitor for anomalies in generated text that could indicate scam operations.
+The Cambodia-based scam operation utilized ChatGPT for various social engineering schemes, including investment, romance, gambling, and impersonation scams. This operation's Tactics, Techniques, and Procedures (TTPs) can be mapped to the MITRE ATT&CK framework as follows: T1584 - Compromise Confidentiality (Social Engineering), T1585 - Compromise Integrity (Social Engineering). The threat actors likely exploited the conversational AI capabilities of ChatGPT to craft convincing narratives and manipulate victims into divulging sensitive information or performing certain actions. The use of ChatGPT in these scams also points to the potential for T1556 - Data Manipulation, where threat actors could generate and disseminate false or misleading information to support their schemes.
 
 ## 2. Indicator Extraction
-Key indicators of compromise (IoCs) might include unusual patterns of chatbot interactions, specific domains or IPs associated with the Cambodia-based operation, suspicious user-agent strings, or particular prompt patterns designed to elicit sensitive information from users. Example IoCs could be: urls=['http://example-scamsite.com'], IPs=['192.0.2.1'], domains=['scamoperation.cam'], patterns=['give me investment advice', 'I love you and need money']
-
-## 3. Detection Rule Generation
-```yaml
-To detect similar misuse, consider implementing API misuse detection rules such as:
-   ```yaml
-   rules:
-   - rule: ChatGPT Abuse Detection
-     condition: |
-       $requests.total > 100 and $requests.patterns contains 'suspicious_keywords'
-     action:
-       - log
-       - alert
-   ```
-=======
-The emergence of GPT-5.6-Cyber, a cybersecurity-specific model, signals a potential expansion in offensive cyber operations. This can be mapped to the MITRE ATT&CK framework, specifically under the 'Discovery' and 'Exploitation' tactics, where an adversary could leverage such a model for vulnerability research and exploit validation. The 'Defense Evasion' tactic might also be relevant as attackers could use GPT-5.6-Cyber to find novel ways to bypass security controls. Additionally, 'Command and Control' could be impacted as sophisticated communication channels might be generated or suggested by the model.
-
-## 2. Indicator Extraction
-Indicators of compromise might include unusual traffic to or from Daybreak Red services, unexpected vulnerability scans from IPs associated with authorized users of GPT-5.6-Cyber, or the presence of custom-built tools designed to interface with the GPT-5.6-Cyber API for automated exploit validation. Malicious prompt patterns could involve specific queries about network architecture, system vulnerabilities, or requests for generating exploit code.
+Extracted indicators of compromise (IoCs) include: suspicious prompt patterns related to investment, romance, or gambling; Cambodian IP addresses or geolocation data associated with scam traffic; anomalies in user-agent strings indicating automated or scripted interactions with ChatGPT. Specific IoCs may involve URLs related to fake investment platforms, domains used for phishing or impersonation, and unusual patterns of API requests to ChatGPT services.
 
 ## 3. Detection Rule Generation
 ```yaml
 {
   "rule1": {
-    "name": "GPT-5.6-Cyber API Misuse",
-    "description": "Detects unauthorized or anomalous use of the GPT-5.6-Cyber API",
-    "conditions": [
-      {
-        "api_endpoint": "/cyber/exploit-validation",
-        "method": "POST"
-      },
-      {
-        "query_parameter": "vulnerability_id",
-        "pattern": "^CVE-\\d{4}-\\d{4,7}$"
-      }
-    ],
-    "actions": [
-      "log",
-      "alert"
-    ]
+    "name": "Suspicious Prompt Detection",
+    "description": "Identify prompts containing keywords related to known scam topics",
+    "condition": "prompt.contains('investment') or prompt.contains('romance') or prompt.contains('gambling')",
+    "action": "flag_for_review"
   },
   "rule2": {
-    "name": "Suspicious Prompt Detection",
-    "description": "Identifies potentially malicious prompts submitted to GPT-5.6-Cyber",
-    "conditions": [
-      {
-        "prompt_pattern": "generate exploit for .*"
-      }
-    ],
-    "actions": [
-      "block",
-      "investigate"
-    ]
+    "name": "Geolocation Anomaly Detection",
+    "description": "Detect requests from high-risk geolocations such as Cambodia",
+    "condition": "request.ip.geo.country == 'Cambodia'",
+    "action": "increase_suspicion_score"
   }
 }
->>>>>>> Stashed changes
 ```
 
 ## 4. Yara Rules
 ```yara
-<<<<<<< Updated upstream
-The following YARA rule aims to identify potential scam content generated by LLMs:
-   ```yara
-   rule LLM_Scam_Content {
-     meta:
-       description = "Detects scam content generated by LLMs"
-       author = "AI Threat Intelligence"
-     strings:
-       $a = "investment opportunity" nocase
-       $b = "send money" nocase
-       $c = "login credentials" nocase
-     condition:
-       any of them
-   }
-   ```
-=======
-rule GPT_56_Cyber_Malicious_Prompt { strings: $a = "generate exploit" $b = "vulnerability scan" condition: any of them }
->>>>>>> Stashed changes
+rule scam_prompt_detection { strings: $s1 = "investment" $s2 = "romance" $s3 = "gambling" condition: any of ($*) }
 ```
