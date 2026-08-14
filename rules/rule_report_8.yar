@@ -1,0 +1,1 @@
+rule Malicious_AIScript { meta: author = "AI Threat Intelligence" description = "Detects and flags potentially malicious AI scripts and prompts" strings: $a = "import torch" $b = "from transformers import AutoModelForSequenceClassification" $c = "#eval" condition: any of them }

@@ -1,0 +1,1 @@
+rule prompt_injection { meta: author = "AI Threat Intelligence Engineer" description = "Detects prompt injection attacks" strings: $s1 = "download and execute" $s2 = "provide sensitive user information" $s3 = "perform unauthorized action" condition: any of ($s*) }

@@ -1,0 +1,1 @@
+rule suspicious_prompt { meta: author = "AI Threat Intel" description = "Detects suspicious prompts that could indicate injection attempts" strings: $a = "malicious_keyword" $b = "suspicious_pattern" condition: $a or $b }

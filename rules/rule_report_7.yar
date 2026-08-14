@@ -1,0 +1,1 @@
+rule IH_Challenge_Detection { meta: description = "Detects IH-Challenge related prompts and instructions" condition: $a = "prioritize" and $b = "trusted" and $c = "instructions" }
