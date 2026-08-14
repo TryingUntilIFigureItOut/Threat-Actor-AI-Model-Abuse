@@ -51,18 +51,17 @@ rules/.yar
 
 ## 📂 Repository Structure
 
-├── .github/
-│   └── workflows/
-│       └── pipeline.yml              # GitHub Actions CI/CD workflow (12h schedule)
-├── rules/                            # Generated intelligence briefs and YARA rules
-│   ├── detection_report_*.md         # Full MITRE ATLAS mappings and YAML detection rules
-│   └── rule_report_*.yar             # Standalone YARA rule files
-├── AI_Model_Abuse.db                 # SQLite database storing raw and analyzed threat telemetry
-├── CTI AI Model Abuse Pipeline.py   # Telemetry ingestion, taxonomy filtering, and DB migration
-├── analyze_reports.py                # AI analysis and detection rule generation engine
-├── requirements.txt                  # Python dependencies
-├── disrupting-malicious-uses-of-ai.PDF # Seed CTI report
-└── README.md                         # Documentation
+| File / Directory | Description |
+| :--- | :--- |
+| **`.github/workflows/pipeline.yml`** | GitHub Actions CI/CD workflow running on a 12-hour schedule |
+| **`rules/detection_report_*.md`** | AI threat intelligence briefs with MITRE ATLAS mappings & YAML rules |
+| **`rules/rule_report_*.yar`** | Standalone YARA detection signatures generated per threat report |
+| **`AI_Model_Abuse.db`** | SQLite database tracking raw feeds, categories, IoCs, and rule outputs |
+| **`CTI AI Model Abuse Pipeline.py`** | Telemetry ingestion engine, taxonomy filter, and schema migrator |
+| **`analyze_reports.py`** | Groq Llama-3.3-70B AI inference and rule generation script |
+| **`requirements.txt`** | Python project package dependencies |
+| **`disrupting-malicious-uses-of-ai.PDF`** | Seed CTI report utilized for historical telemetry |
+| **`README.md`** | Project architecture, taxonomy guide, and setup instructions |
 
 | Category | Description |
 | :--- | :--- |
