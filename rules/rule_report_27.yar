@@ -1,0 +1,1 @@
+rule fake_review_job_scam : scam { meta: description = "Detects scam patterns involving fake review jobs" strings: $translation_pattern = "translate\s+to\s+[a-z]{2}" $payment_fee_request = "pay\s+fee\s+for\s+review" condition: any of them }

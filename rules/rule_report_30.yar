@@ -1,0 +1,1 @@
+rule prompt_engineering { meta: author = "AI Threat Intel" description = "Identify attempts to manipulate LLM outputs" strings: $a = "sensitive_query" $b = "exploitative_phrase" condition: any of them }
