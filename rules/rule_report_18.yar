@@ -1,0 +1,1 @@
+rule Korean_Malware_Support {strings: $a = "" ascii wide, $b = "" ascii wide, $c = "phish" ascii wide; condition: any of them}

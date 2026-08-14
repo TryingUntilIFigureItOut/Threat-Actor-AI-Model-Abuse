@@ -1,0 +1,1 @@
+rule OpenAI_Scam_Scripts { meta: author = "AI Threat Intelligence" description = "Detects AI-generated scam scripts" strings: $a = "Please enter your credit card details" $b = "Download and install the attached software" condition: any of them }

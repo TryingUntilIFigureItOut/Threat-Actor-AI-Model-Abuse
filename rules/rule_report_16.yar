@@ -1,0 +1,1 @@
+rule OpenAI_Misuse_Detection { meta: author = "AI Threat Intelligence" description = "Detects potential OpenAI model misuse" strings: $a = "openai/api/" $b = "Authorization: Bearer" condition: $a and $b }

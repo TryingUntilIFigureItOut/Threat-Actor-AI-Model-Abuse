@@ -1,0 +1,1 @@
+rule AI_Generated_Malware { meta: description = "Detects AI-generated malware" strings: $a = "malware_loader" $b = "evasion_layer" $c = "credential_theft" condition: any of them }
