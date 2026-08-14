@@ -1,4 +1,4 @@
-# 🛡️ Threat-Actor AI Model Abuse Intelligence & Detection Pipeline
+## 🛡️ Threat-Actor AI Model Abuse Intelligence & Detection Pipeline
 
 An automated Cyber Threat Intelligence (CTI) ingestion and detection-engineering pipeline designed to monitor, classify, and generate actionable detection artifacts (YARA rules, behavioral signatures, and IoCs) for threat actor abuse of AI/LLM platforms.
 
@@ -19,37 +19,35 @@ This project automates the end-to-end intelligence cycle:
 
 ## 🏗️ Architecture & Pipeline Flow
 
-┌─────────────────────────┐     ┌────────────────────────┐
-│ OpenAI / Industry Feeds │     │ Historical CTI (PDFs)  │
-└────────────┬────────────┘     └───────────┬────────────┘
-│                              │
-└──────────────┬───────────────┘
+OpenAI / Industry Feeds
+Historical CTI (PDFs)  
+
 ▼
-┌─────────────────────────────────┐
-│ CTI AI Model Abuse Pipeline.py  │
-│  • Feed Parsing & Extraction    │
-│  • Taxonomy / Filtering Engine  │
-│  • SQLite Schema Migration      │
-└────────────────┬────────────────┘
+
+CTI AI Model Abuse Pipeline.py  
+ • Feed Parsing & Extraction    
+ • Taxonomy / Filtering Engine  
+ • SQLite Schema Migration     
+ 
 ▼
-┌────────────────────────┐
-│   AI_Model_Abuse.db    │
-│ (Raw & Categorized CTI)│
-└────────────┬───────────┘
+
+ AI_Model_Abuse.db 
+(Raw & Categorized CTI)
+
 ▼
-┌─────────────────────────────────┐
-│       analyze_reports.py        │
-│  • Groq Llama-3.3-70B Analysis  │
-│  • MITRE ATLAS/ATT&CK Mapping   │
-│  • Indicator & Signature Gen    │
-└────────────────┬────────────────┘
+
+analyze_reports.py
+ • Groq Llama-3.3-70B Analysis
+ • MITRE ATLAS/ATT&CK Mapping
+ • Indicator & Signature Gen   
+
 ▼
-┌───────────────────┴───────────────────┐
-▼                                       ▼
-┌──────────────────┐                  ┌──────────────────┐
-│ rules/.md       │                  │ rules/.yar      │
-│ (Analysis Brief) │                  │ (YARA Signatures)│
-└──────────────────┘                  └──────────────────┘
+
+rules/.md                   
+(Analysis Brief)
+
+rules/.yar  
+(YARA Signatures)
 
 ## 📂 Repository Structure
 
@@ -74,7 +72,7 @@ This project automates the end-to-end intelligence cycle:
 | **`State / Criminal Attribution`** | Activities linked to nation-state APTs, state-sponsored entities, or cybercrime cartels. |
 | **`Technical Exploitation`** | Prompt injection, jailbreaking, system prompt exfiltration, and model evasion. |
 
-🚀 Setup & Local Execution
+## 🚀 Setup & Local Execution
 Prerequisites
 Python 3.10+
 
@@ -100,25 +98,6 @@ cd Threat-Actor-AI-Model-Abuse
   python analyze_reports.py
   Generated rules and MITRE mappings will be written to the rules/ directory and updated directly inside AI_Model_Abuse.db.
 
-⚙️ Automated GitHub Actions Workflow
-  This repository runs automatically every 12 hours via .github/workflows/pipeline.yml.
-
-  To enable the automated analysis on GitHub:
-
-  Navigate to your repository on GitHub.
-
-  Go to Settings > Secrets and variables > Actions.
-
-  Create a New repository secret:
-
-    Name: GROQ_API_KEY
-
-    Secret: your-groq-api-key
-
-  Ensure workflow read and write permissions are enabled under Settings > Actions > General > Workflow permissions -> Select Read and write permissions.
-  │ rules/.md       │                  │ rules/.yar      │
-  │ (Analysis Brief) │                  │ (YARA Signatures)│
-  └──────────────────┘                  └──────────────────┘
 
 ## ⚙️ Automated GitHub Actions Workflow
 
@@ -146,7 +125,7 @@ Ensure the pipeline bot can commit generated rules and databases back to the rep
   * **Scheduled Cron:** Runs automatically every 12 hours (`0 */12 * * *`).
   * **Manual Dispatch:** Run manually anytime via the **Actions** tab.
 
-📊 Database Schema (reports Table)
+## 📊 Database Schema (reports Table)
 
 | Column | Type | Description |
 | :--- | :--- | :--- |
