@@ -7,7 +7,6 @@ on:
     - cron: "0 */12 * * *" # Runs every 12 hours
   workflow_dispatch:
 
-# Grant write permissions to commit generated rules and DB back to the repository
 permissions:
   contents: write
 
@@ -40,6 +39,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add rules/ AI_Model_Abuse.db
+          git add -f rules/ AI_Model_Abuse.db
           git commit -m "Auto-update database and detection rules" || echo "No changes to commit"
           git push
