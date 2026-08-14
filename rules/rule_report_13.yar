@@ -1,0 +1,1 @@
+rule GPT_Malicious_Usage { meta: author = "AI Threat Intel" description = "Detects potential misuse of GPT models" strings: $s1 = "phishing" $s2 = "malware" condition: any of them }

@@ -1,0 +1,1 @@
+rule ai_misuse_detection { meta: author = "AI Threat Intel" description = "Detects potential AI misuse" strings: $a = "OpenAI" $b = "EU Economic Blueprint 2.0" condition: $a and $b }

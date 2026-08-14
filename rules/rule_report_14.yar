@@ -1,0 +1,1 @@
+rule prompt_injection { meta: description = "Detects potential prompt injection attempts" condition: $a = "malicious_keyword" in (1..10) of ($b = "http" .. "https") and #b > 3 }
