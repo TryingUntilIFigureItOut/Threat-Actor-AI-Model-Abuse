@@ -4,21 +4,28 @@
 **Category:** Technical Exploitation
 
 ## 1. Threat Analysis & TTP Mapping
-The introduction of the OpenAI Safety Bug Bounty program indicates a proactive approach to identifying and mitigating potential threats such as agentic vulnerabilities, prompt injection, and data exfiltration. Mapping to MITRE ATT&CK, these threats align with techniques like T1204 (User Execution) for prompt injection, and T1005 (Data from Local System) for data exfiltration. The bounty program encourages researchers to test the boundaries of OpenAI's models, potentially uncovering new vulnerabilities and tactics, techniques, and procedures (TTPs) that could be used by malicious actors.
+The OpenAI Safety Bug Bounty program aims to identify potential risks associated with AI abuse, including agentic vulnerabilities, prompt injection, and data exfiltration. Mapping to MITRE ATT&CK, these threats align with TTPs such as 'Exploitation for Privilege Escalation' (T1068) and 'Data Exfiltration' (T1041). Additionally, prompt injection can be linked to 'Input Validation' weaknesses as outlined in MITRE ATLAS, highlighting the need for robust input validation and sanitization in LLM systems.
 
 ## 2. Indicator Extraction
-No specific indicators of compromise (IoCs) are provided in the snippet, but potential indicators could include anomalies in API request patterns, unusual prompt sequences, or suspicious user-agent strings. Monitoring for these could help in detecting misuse of OpenAI's services.
+No specific IoCs such as domains, IPs, or URLs are provided in the threat report snippet. However, potential indicators may include anomalous patterns in user input, such as overly complex or repetitive prompt sequences, or unusual query parameters in API requests.
 
 ## 3. Detection Rule Generation
 ```yaml
 {
-  "rule1": {
-    "name": "OpenAI API Misuse Detection",
-    "description": "Detects anomalous API request patterns indicative of prompt injection or data exfiltration attempts.",
-    "condition": "api_request_rate > 100 AND api_error_rate > 0.5",
+  "api_misuse_detection": {
+    "rule_name": "Prompt Injection Detection",
+    "pattern": "excessive recursion or nested queries in user input",
     "actions": [
-      "log",
-      "alert"
+      "flag for review",
+      "apply rate limiting"
+    ]
+  },
+  "behavioral_detection": {
+    "rule_name": "Anomalous Query Detection",
+    "pattern": "queries with multiple consecutive failed auth attempts or unknown origins",
+    "actions": [
+      "block IP temporarily",
+      "notify security team"
     ]
   }
 }
@@ -26,5 +33,5 @@ No specific indicators of compromise (IoCs) are provided in the snippet, but pot
 
 ## 4. Yara Rules
 ```yara
-rule OpenAI_Prompt_Injection { meta: author = "AI Threat Intel" description = "Detects potential prompt injection patterns in OpenAI API requests" strings: $a = "[insert suspicious prompt pattern]" condition: $a}
+rule OpenAI_Safety_Threat { meta: author = "AI Threat Intel" description = "Detects potential Safety Bug Bounty threats" strings: $a = "excessive recursion" $b = "nested queries" $c = "unknown origin" condition: any of them }
 ```

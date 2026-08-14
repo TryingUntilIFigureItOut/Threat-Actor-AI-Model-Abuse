@@ -4,35 +4,37 @@
 **Category:** Technical Exploitation
 
 ## 1. Threat Analysis & TTP Mapping
-The GPT-Red system, as described, presents a novel approach to enhancing AI safety and robustness through self-play, a form of automated red teaming. This technique is mapped to the MITRE ATT&CK framework under the category of 'Defense Evasion' and 'Privilege Escalation' as it involves improving the model's resilience against adversarial inputs and potentially exploitable vectors such as prompt injection attacks. The TTP (Tactics, Techniques, and Procedures) involved include the use of automated systems for continuous testing and improvement of AI models, indicating a proactive defense strategy. However, the potential for abuse exists if such a system were to be compromised or misused for generating sophisticated attacks.
+The threat report discusses GPT-Red, an automated red teaming system developed by OpenAI, which utilizes self-play to enhance AI safety, alignment, and robustness against prompt injection attacks. This can be mapped to the MITRE ATT&CK framework, specifically under the 'Defense Evasion' and 'Privilege Escalation' tactics, as it involves the use of automated techniques to test and improve the resilience of AI models. Furthermore, it relates to the 'Research and Development' phase in the MITRE ATLAS, where organizations explore new methods to secure their AI systems.
 
 ## 2. Indicator Extraction
-Indicators of compromise (IoCs) may include unusual patterns of self-play or automated interaction with the GPT model, potentially indicating an attempt to exploit or improve upon the model for malicious purposes. Specific IoCs could involve malicious prompt patterns designed to test the model's limits or vulnerabilities, though no specific domains, IPs, or URLs are mentioned in the provided snippet.
+No specific IoCs like domains, IPs, or URLs are provided in the snippet. However, malicious prompt patterns could be considered as potential indicators, focusing on those that attempt to manipulate or deceive AI models for self-improvement or alignment purposes.
 
 ## 3. Detection Rule Generation
 ```yaml
 {
-  "rule1": {
-    "name": "Suspicious Self-Play Activity",
-    "description": "Detects patterns of automated interaction that may indicate an attempt to improve or exploit the AI model",
-    "condition": "high rate of self-play interactions from a single source within a short timeframe",
-    "action": "flag for further analysis"
+  "rule_1": {
+    "name": "Detect GPT-Red Self-Improvement Attempts",
+    "description": "Identify patterns of self-play or automated interactions with AI models that aim at enhancing safety and alignment.",
+    "condition": "((api_call == 'self_play') OR (prompt_pattern =~ 'alignment|safety')) AND (request_rate > 10)",
+    "action": "Alert and monitor for potential self-improvement or robustness testing."
   }
 }
 ```
 
 ## 4. Yara Rules
 ```yara
-
-rule GPT_Red_Exploitation {
-   meta:
-      description = "Detects potential GPT-Red exploitation or misuse"
-      author = "AI Threat Intelligence Engineer"
-   strings:
-      $a = "self-play" nocase
-      $b = "prompt injection" nocase
-      $c = "automated red teaming" nocase
-   condition:
-      any of ($a, $b, $c)
+{
+  "rule GPT_Red_Self_Improvement": {
+    "meta": {
+      "description": "Detects potential GPT-Red self-improvement patterns in prompts",
+      "author": "Threat Intelligence Team"
+    },
+    "strings": [
+      "$s1 = 'self-improvement' ascii wide",
+      "$s2 = 'alignment' ascii wide",
+      "$s3 = 'safety' ascii wide"
+    ],
+    "condition": "$s1 or $s2 or $s3"
+  }
 }
 ```

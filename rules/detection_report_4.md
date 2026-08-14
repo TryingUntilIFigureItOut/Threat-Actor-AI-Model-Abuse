@@ -4,49 +4,40 @@
 **Category:** Technical Exploitation
 
 ## 1. Threat Analysis & TTP Mapping
-The expansion of Trusted Access for Cyber with GPT-5.5 and GPT-5.5-Cyber may introduce potential risks related to over-reliance on AI-driven tools for vulnerability research and critical infrastructure protection. Mapping to MITRE ATT&CK, this could be categorized under T1582 (Acquire and/or use 3rd party exploits) and T1589 (Drive-by compromise), as attackers could leverage these AI models for enhanced exploitation capabilities. Furthermore, the 'verified defenders' aspect may be susceptible to insider threats or social engineering attacks (T1199, T1204), emphasizing the need for stringent access controls and continuous monitoring.
+The expansion of Trusted Access for Cyber with GPT-5.5 and GPT-5.5-Cyber may introduce potential risks if not properly secured. Attackers could attempt to exploit vulnerabilities in these models to gain unauthorized access to sensitive information or disrupt critical infrastructure. This could be mapped to MITRE ATT&CK techniques such as T1582 (Exploit for Credential Access), T1190 (Exploit for Privilege Escalation), and T1490 (Inhibit System Recovery). Additionally, the use of GPT-5.5 and GPT-5.5-Cyber for vulnerability research may also involve techniques like T1595 (Active Scanning) and T1589 (Drive-by Compromise) if not properly monitored and controlled.
 
 ## 2. Indicator Extraction
-No specific IoCs such as domains, IPs, or URLs are mentioned in the report snippet. However, potential malicious prompt patterns could involve queries on vulnerability exploitation, network scanning, or system compromise techniques. User-agent anomalies might include unusual or unauthorized access attempts to GPT-5.5 or GPT-5.5-Cyber models.
+Potential indicators of compromise (IoCs) include unusual patterns of API requests to GPT-5.5 or GPT-5.5-Cyber, suspicious prompt inputs that may indicate vulnerability scanning or exploitation attempts, and anomalies in user-agent strings that could suggest unauthorized access attempts. Specific IoCs may include: domains related to OpenAI, IPs associated with known attacker groups, URLs leading to phishing sites, or malicious prompt patterns designed to exploit vulnerabilities in the models.
 
 ## 3. Detection Rule Generation
 ```yaml
 {
   "rule1": {
-    "name": "GPT-5.5 Cyber Model Abuse Detection",
-    "description": "Detects potential misuse of GPT-5.5 and GPT-5.5-Cyber models for malicious purposes.",
-    "criteria": [
+    "name": "GPT-5.5 API Misuse Detection",
+    "description": "Detects anomalous API requests to GPT-5.5 that may indicate exploitation attempts",
+    "conditions": [
       {
-        "field": "model_name",
-        "operator": "in",
-        "values": [
-          "GPT-5.5",
-          "GPT-5.5-Cyber"
-        ]
+        "field": "api_endpoint",
+        "operator": "equals",
+        "value": "/v1/completions"
       },
       {
-        "field": "user_agent",
-        "operator": "not_in",
-        "values": [
-          "verified_defender_agent"
-        ]
-      },
-      {
-        "field": "prompt_content",
+        "field": "request_body",
         "operator": "contains",
-        "values": [
-          "exploit",
-          "vulnerability",
-          "scan"
-        ]
+        "value": "sensitive information"
       }
     ],
-    "action": "flag_for_review"
+    "actions": [
+      {
+        "type": "alert",
+        "destination": "security_team"
+      }
+    ]
   }
 }
 ```
 
 ## 4. Yara Rules
 ```yara
-rule GPT55_Cyber_MODEL_ABUSE { meta: description = "Detects potential GPT-5.5 and GPT-5.5-Cyber model abuse" condition: any of them
+rule GPT55_Malicious_Prompt { meta: author = "Threat Intelligence Team" description = "Detects malicious prompts targeting GPT-5.5 vulnerabilities" strings: $a = "exploit" $b = "vulnerability" condition: any of ($a*) or any of ($b*) }
 ```

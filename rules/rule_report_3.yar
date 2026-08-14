@@ -1,12 +1,14 @@
-
-rule GPT_Red_Exploitation {
-   meta:
-      description = "Detects potential GPT-Red exploitation or misuse"
-      author = "AI Threat Intelligence Engineer"
-   strings:
-      $a = "self-play" nocase
-      $b = "prompt injection" nocase
-      $c = "automated red teaming" nocase
-   condition:
-      any of ($a, $b, $c)
+{
+  "rule GPT_Red_Self_Improvement": {
+    "meta": {
+      "description": "Detects potential GPT-Red self-improvement patterns in prompts",
+      "author": "Threat Intelligence Team"
+    },
+    "strings": [
+      "$s1 = 'self-improvement' ascii wide",
+      "$s2 = 'alignment' ascii wide",
+      "$s3 = 'safety' ascii wide"
+    ],
+    "condition": "$s1 or $s2 or $s3"
+  }
 }

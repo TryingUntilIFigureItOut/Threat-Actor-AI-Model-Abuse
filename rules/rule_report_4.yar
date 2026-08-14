@@ -1,1 +1,1 @@
-rule GPT55_Cyber_MODEL_ABUSE { meta: description = "Detects potential GPT-5.5 and GPT-5.5-Cyber model abuse" condition: any of them
+rule GPT55_Malicious_Prompt { meta: author = "Threat Intelligence Team" description = "Detects malicious prompts targeting GPT-5.5 vulnerabilities" strings: $a = "exploit" $b = "vulnerability" condition: any of ($a*) or any of ($b*) }
