@@ -1,0 +1,1 @@
+rule SweetSpecter_AI_Model_Abuse { meta: author = "Your Name" description = "Detects SweetSpecter AI model abuse patterns" strings: $a = "vulnerability research" $b = "spear-phishing" condition: any of them }
